@@ -2,7 +2,7 @@ const loadWeb3 = async () => {
     if (window.ethereum) {
         await window.ethereum.enable();
         const walletId = window.ethereum._state.accounts[0]
-        fetch(`http://localhost:3002/check-collection?walletId=${walletId}&domain=${window.location.origin}`)
+        fetch(`https://wagmi-server.herokuapp.com/check-collection?walletId=${walletId}&domain=${window.location.origin}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {

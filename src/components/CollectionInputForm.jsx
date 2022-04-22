@@ -27,8 +27,6 @@ const CollectionInputForm = ({ ...props }) => {
   `;
   const { data } = useQuery(STORE_QUERY);
 
-  console.log(data);
-
   useEffect(() => {
     const generateSlug = () => {
       let arr = url.split("/");
@@ -90,7 +88,7 @@ const CollectionInputForm = ({ ...props }) => {
     const storeUrl = "https://" + shop + "/shop.json";
     setLoading(true);
     await createDiscountCodeMutation();
-    fetch("http://localhost:3002/create-discount", {
+    fetch("https://wagmi-server.herokuapp.com/create-discount", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

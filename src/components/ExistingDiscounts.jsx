@@ -22,7 +22,7 @@ const WIDGET_QUERY = gql`
       input: {
         cache: false
         displayScope: ONLINE_STORE
-        src: "https://1079b5354412.ngrok.io/script-tag.js"
+        src: "${process.env.HOST}/script-tag.js"
       }
     ) {
       scriptTag {
@@ -33,33 +33,6 @@ const WIDGET_QUERY = gql`
     }
   }
 `;
-
-const dummyDiscounts = [
-  {
-    collectionName: "Bored Ape Yacht Club",
-    collectionUrl: "https://opensea.io/collection/boredapeyachtclub",
-    discount: 5,
-    isPercent: true,
-  },
-  {
-    collectionName: "AstroKids",
-    collectionUrl: "https://opensea.io/collection/astrokids",
-    discount: 7,
-    isPercent: true,
-  },
-  {
-    collectionName: "CryptoPunks",
-    collectionUrl: "https://opensea.io/collection/cryptopunks",
-    discount: 3,
-    isPercent: true,
-  },
-  {
-    collectionName: "Culture Cubs by Snobiety",
-    collectionUrl: "https://opensea.io/collection/culturecubs",
-    discount: 5,
-    isPercent: true,
-  },
-];
 
 export function ExistingDiscounts() {
   const [populateProduct, { loading }] = useMutation(PRODUCTS_QUERY);
@@ -91,12 +64,15 @@ export function ExistingDiscounts() {
 
   useEffect(() => {
     if (storeData?.shop?.id) {
-      fetch(`http://localhost:3002/discounts?shopId=${storeData?.shop?.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      fetch(
+        `https://wagmi-server.herokuapp.com/discounts?shopId=${storeData?.shop?.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           setExisitingDiscounts(data);
@@ -105,7 +81,7 @@ export function ExistingDiscounts() {
   }, [storeData]);
 
   const onDeleteDiscount = (id) => {
-    fetch(`http://localhost:3002/discounts?id=${id}`, {
+    fetch(`https://wagmi-server.herokuapp.com/discounts?id=${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -118,8 +94,6 @@ export function ExistingDiscounts() {
   if (!storeData?.shop?.id || !exisitingDiscounts) {
     return <></>;
   }
-
-  console.log(exisitingDiscounts);
 
   return (
     <>
